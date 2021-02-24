@@ -108,7 +108,6 @@ export class BookDetailsComponent implements OnInit {
    * @memberof BookDetailsComponent
    */
   getBookDetails(libraryId: number, bookId: number) {
-    console.log("inside the book details");
     combineLatest([
       this.books.getBook(libraryId, bookId),
       this.books.getNumberOfAvailableBookCopies(libraryId, bookId),
@@ -117,7 +116,6 @@ export class BookDetailsComponent implements OnInit {
       .pipe(
         take(1),
         tap(([book, numberOfAvailableCopies, signedOutBooks]) => {
-          console.log(book);
           this.numBooksSignedOut = signedOutBooks.length;
           this.numBooksAvailable = numberOfAvailableCopies;
           this.numOfThisBookSignedOutByUser = filter(
