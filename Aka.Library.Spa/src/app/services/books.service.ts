@@ -1,32 +1,28 @@
-import { environment } from '../../environments/environment';
-import { LibraryBook } from '../shared/library-book';
-import { Book } from '../shared/book';
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { SignedOutBook } from '../shared/signed-out-book';
-import { map } from 'lodash';
-import { GoogleBooksMetadata } from '../shared/google-books-metadata';
-import { Observable } from 'rxjs/internal/Observable';
-import { throwError } from 'rxjs/internal/observable/throwError';
-import { of } from 'rxjs/internal/observable/of';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable, of, throwError } from "rxjs";
+import { map } from "rxjs/operators";
+import { environment } from "../../environments/environment";
+import { Book } from "../shared/book";
+import { GoogleBooksMetadata } from "../shared/google-books-metadata";
+import { LibraryBook } from "../shared/library-book";
+import { SignedOutBook } from "../shared/signed-out-book";
 
 @Injectable()
 export class BooksService {
-
   apiUrl: string;
   googleBooksAPIKey: string;
 
   constructor(private http: HttpClient) {
     this.apiUrl = `${environment.apiUrl}${environment.apiPath}/libraries/`;
-    this.googleBooksAPIKey = 'AIzaSyCCN_lQcnEQ51ohoDBroFvfwN8wnJi9iPY';
+    this.googleBooksAPIKey = "AIzaSyCCN_lQcnEQ51ohoDBroFvfwN8wnJi9iPY";
   }
 
   getBooks(libraryId: number): Observable<Book[]> {
     const url = `${this.apiUrl}${libraryId}/books`;
-    return this.http.get<LibraryBook[]>(url)
-      .pipe(
-        map(items => items.map(item => item.book))
-      );
+    return this.http
+      .get<LibraryBook[]>(url)
+      .pipe(map((items) => items.map((item) => item.book)));
   }
 
   getBook(libraryId: number, bid: number): Observable<Book> {
@@ -52,7 +48,10 @@ export class BooksService {
    * @returns {Observable<number>} Count of books
    * @memberof BooksService
    */
-  getTotalNumberOfCopiesInLibrary(libraryId: number, bookId: number): Observable<number> {
+  getTotalNumberOfCopiesInLibrary(
+    libraryId: number,
+    bookId: number
+  ): Observable<number> {
     // TODO: Add implementation
     return of(0);
   }
@@ -66,17 +65,29 @@ export class BooksService {
    * @returns {Observable<number>}
    * @memberof BooksService
    */
-  getNumberOfAvailableBookCopies(libraryId: number, bookId: number): Observable<number> {
+  getNumberOfAvailableBookCopies(
+    libraryId: number,
+    bookId: number
+  ): Observable<number> {
     // TODO: Add implementation
-    return throwError('Not Implemented');
+
+    return throwError("Not Implemented");
   }
 
-  checkOutBook(libraryId: number, bookId: number, memberId: number): Observable<SignedOutBook> {
+  checkOutBook(
+    libraryId: number,
+    bookId: number,
+    memberId: number
+  ): Observable<SignedOutBook> {
     const url = `${this.apiUrl}${libraryId}/books/${bookId}/signout/${memberId}`;
     return this.http.post<SignedOutBook>(url, {});
   }
 
-  returnBook(libraryId: number, bookId: number, memberId: number): Observable<SignedOutBook> {
+  returnBook(
+    libraryId: number,
+    bookId: number,
+    memberId: number
+  ): Observable<SignedOutBook> {
     const url = `${this.apiUrl}${libraryId}/books/${bookId}/return/${memberId}`;
     return this.http.put<SignedOutBook>(url, {});
   }
@@ -94,8 +105,6 @@ export class BooksService {
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${this.googleBooksAPIKey}`;
 
     // return this.http.get(url);
-    return throwError('Funtion not implemented');
-
+    return throwError("Funtion not implemented");
   }
-
 }
