@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of, throwError } from "rxjs";
+import { Observable, of } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "../../environments/environment";
 import { Book } from "../shared/book";
@@ -70,8 +70,8 @@ export class BooksService {
     bookId: number
   ): Observable<number> {
     // TODO: Add implementation
-
-    return throwError("Not Implemented");
+    const url = `${this.apiUrl}${libraryId}/books/${bookId}`;
+    return this.http.get<Book[]>(url).pipe(map((books) => books.length));
   }
 
   checkOutBook(
@@ -104,7 +104,6 @@ export class BooksService {
     // TODO: Add implementation
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${this.googleBooksAPIKey}`;
 
-    // return this.http.get(url);
-    return throwError("Funtion not implemented");
+    return this.http.get<GoogleBooksMetadata>(url);
   }
 }
